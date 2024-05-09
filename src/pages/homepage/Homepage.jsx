@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const Homepage = () => {
-  return <div>Homepage</div>;
+
+
+  //print hello after page load, automatic
+  useEffect(() => {
+    console.log("hello!!")
+  })
+
+  return (<div>Homepage</div>);
 };
 
 export default Homepage;

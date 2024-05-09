@@ -89,21 +89,21 @@ const Registerpage = () => {
           }
 
           <label className="mt-3">Last Name</label>
-          <input type="text" onChange={handleLastName} className="form-control" placeholder="Enter Last Name" />
+          <input type="text" onChange={handleLastName} className="form-control mt-3" placeholder="Enter Last Name" />
 
           {
             lastNameError && <p className='text-danger' >{lastNameError}</p>
           }
 
           <label className="mt-3">Email</label>
-          <input type="email" onChange={handleEmail} className="form-control" placeholder="Enter Email Address" />
+          <input type="email" onChange={handleEmail} className="form-control mt-3" placeholder="Enter Email Address" />
 
           {
             emailError && <p className='text-danger' >{emailError}</p>
           }
 
           <label className="mt-3">Password</label>
-          <input type="text" onChange={handlePassword} className="form-control" placeholder="Enter Password" />
+          <input type="text" onChange={handlePassword} className="form-control mt-3" placeholder="Enter Password" />
 
           {
             passwordError && <p className='text-danger' >{passwordError}</p>
