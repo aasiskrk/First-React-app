@@ -2,7 +2,7 @@ import axios from "axios";
 
 // creating an instance of axios
 
-const Api = axios.create({
+const Api2 = axios.create({
   baseURL: "http://localhost:5000",
   withCredentials: true,
   headers: {
@@ -12,4 +12,4 @@ const Api = axios.create({
 
 //creating test api
 
-export const testApi = () => Api.get("/test");
+export const testApi2 = () => Api2.get("/test_new");
