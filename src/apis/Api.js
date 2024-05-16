@@ -13,3 +13,7 @@ const Api = axios.create({
 //creating test api
 
 export const testApi = () => Api.get("/test");
+
+//creating register api
+
+export const registerUserApi = (data) => Api.post("/api/user/create", data);

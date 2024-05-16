@@ -7,8 +7,8 @@ const Homepage = () => {
   //print hello after page load, automatic
   useEffect(() => {
     console.log("hello!!")
-    
-    testApi().then((res)=>{
+
+    testApi().then((res) => {
       console.log(res)
     })
   })

@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { registerUserApi } from '../../apis/Api';
+import { toast } from 'react-toastify';
 
 const Registerpage = () => {
   //Coding section
@@ -71,7 +73,22 @@ const Registerpage = () => {
     if (!isValid) {
       return; //stop the process
     }
-    console.log(firstName, lastName, email, password, confirmPassword)
+    //Making Api request
+    //Making json object of register data
+    const data = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "password": password
+    }
+    registerUserApi(data).then((res) => {
+      //success : true / false, Message
+      if (res.data.success === false) {
+        toast.error(res.data.message)
+      } else {
+        toast.success(res.data.message)
+      }
+    })
   }
 
 
