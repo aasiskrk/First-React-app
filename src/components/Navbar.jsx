@@ -1,7 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+
+
+
 const Navbar = () => {
+  //get user from local Storage
+  const user = JSON.parse(localStorage.getItem('user'))
+
   return (
     <>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -34,9 +40,25 @@ const Navbar = () => {
               </li> */}
             </ul>
             <form class="d-flex" role="search">
-              <Link to={'/register'} class="btn btn-outline-danger me-2" type="submit">Register</Link>
+              {
+                user ? (<>
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Welcome, {user.firstName}
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a></li>
+                      <li><a class="dropdown-item" href="#">Settings</a></li>
+                      <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                  </div>
+                </>)
+                  : (<>
+                    <Link to={'/register'} class="btn btn-outline-danger me-2" type="submit">Register</Link>
 
-              <Link to={'/login'} class="btn btn-outline-success" type="submit">Login</Link>
+                    <Link to={'/login'} class="btn btn-outline-success" type="submit">Login</Link>
+                  </>)
+              }
             </form>
           </div>
         </div>

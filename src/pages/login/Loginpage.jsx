@@ -1,30 +1,28 @@
 import React, { useState } from "react";
-import { testnewApi } from "../../apis/Api";
+import { loginUserApi } from "../../apis/Api";
+import { toast } from "react-toastify";
 
 function Loginpage() {
-
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   //login function
-
 
   const [emailError, setEmailError] = useState();
   const [passwordError, setPasswordError] = useState();
 
   var validation = () => {
     let isValid = true;
-    if (email === '' || email.includes('@' === false)) {
-      setEmailError('Email is Empty or Invalid')
+    if (email === "" || email.includes("@" === false)) {
+      setEmailError("Email is Empty or Invalid");
       isValid = false;
     }
-    if (password.trim() === '') {
-      setPasswordError('Please enter Password')
+    if (password.trim() === "") {
+      setPasswordError("Please enter Password");
       isValid = false;
     }
     return isValid;
-  }
+  };
 
   // const handleEmailChange = (e) => {
   //   setEmail(e.target.value);
@@ -37,14 +35,33 @@ function Loginpage() {
   const handleLogin = (e) => {
     // Here you can implement your login logic using email and password
     // For demonstration, I'm just logging the values
-    e.preventDefault()
-
+    e.preventDefault();
 
     if (!validation()) {
       return; //stop the process
     }
-    console.log(email, password)
+    //Making json object
+    const data = {
+      email: email,
+      password: password,
+    };
+    loginUserApi(data).then((res) => {
+      //success : true / false, Message
+      if (res.data.success === false) {
+        toast.error(res.data.message);
+      } else {
+        toast.success(res.data.message);
+        //Recieved data: success-bool, message-string, token-string, userData-json object
+        //1. Set token
+        localStorage.setItem('token', res.data.token)
 
+        //2. Convert json object
+        const convertedData = JSON.stringify(res.data.userData)
+
+        //3. set userdata in local storage
+        localStorage.setItem('user', convertedData)
+      }
+    });
     // You can call your API function here
     // For example:
     // testnewApi(email, password).then((res) => {
@@ -61,14 +78,11 @@ function Loginpage() {
         </label>
         <input
           type="email"
-
           className="form-control"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        {
-          emailError && <p className='text-danger' >{emailError}</p>
-        }
+        {emailError && <p className="text-danger">{emailError}</p>}
       </div>
       <div className="mb-3">
         <label htmlFor="password" className="form-label">
@@ -81,9 +95,7 @@ function Loginpage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {
-          passwordError && <p className='text-danger' >{passwordError}</p>
-        }
+        {passwordError && <p className="text-danger">{passwordError}</p>}
       </div>
       <button type="button" className="btn btn-primary" onClick={handleLogin}>
         Login
