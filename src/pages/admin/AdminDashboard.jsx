@@ -1,17 +1,80 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { createProductApi, deleteProduct, getAllProducts } from "../../apis/Api";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
+    //logic for get products
+    //make a state to save (array format)
+    const [products, setProducts] = useState([]);
+    //hit api (get all products) automatically=> use effect (list of products)
+    useEffect(() => {
+        getAllProducts().then((res) => {
+            setProducts(res.data.products);
+
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, [])
+
+    console.log(products)
+
+    //table row ()
+
+
+
+
     const [productName, setProductName] = useState("");
     const [productDescription, setProductDescription] = useState("");
     const [productPrice, setProductPrice] = useState("");
     const [productCategory, setProductCategory] = useState("");
-    const [productImage, setProductImage] = useState("");
-    const [previewImage, setPreviewImage] = useState("");
 
+    //image state
+    const [productImage, setProductImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null);
+
+
+    //function to upload and preview image
     const handleImageUpload = (event) => {
+        //0 index- file, 1 index -name, 2- size
         const file = event.target.files[0]
         setProductImage(file)
         setPreviewImage(URL.createObjectURL(file))
+    }
+    //handle submit
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(productName, productPrice, productCategory, productDescription, productImage)
+
+        //make a logical form data
+
+        const formData = new FormData()
+
+        formData.append('productName', productName)
+        formData.append('productDescription', productDescription)
+        formData.append('productPrice', productPrice)
+        formData.append('productCategory', productCategory)
+        formData.append('productImage', productImage)
+
+        createProductApi(formData).then((res) => {
+            if (res.status === 201) {
+                toast.success(res.data.message)
+            } else {
+                toast.error("Something went wrong in frontend!")
+            }
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status === 400) {
+                    toast.error(error.response.data.message)
+                } else if (error.response.status === 401) {
+                    toast.error(error.response.data.message)
+                }
+            } else if (error.response.status === 500) {
+                toast.error("Internal server error")
+            } else {
+                toast.error("No response")
+            }
+        })
     }
     return (
         <>
@@ -52,10 +115,11 @@ const AdminDashboard = () => {
 
                                         <label htmlFor='' className='mt-2'>Product Image</label>
                                         <input onChange={handleImageUpload} type='file' className='form-control' />
+                                        {/* Preview Image */}
                                         {
                                             previewImage && (
-                                                <div className="mb-2">
-                                                    <img src={previewImage} className="img-fluid"></img>
+                                                <div className="mb-2 mt-2">
+                                                    <img src={previewImage} alt="img" className="img-fluid rounded object-fit-cover" />
                                                 </div>
                                             )
                                         }
@@ -68,7 +132,7 @@ const AdminDashboard = () => {
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Add Products</button>
+                                    <button onClick={handleSubmit} type="button" class="btn btn-primary">Add Products</button>
                                 </div>
                             </div>
                         </div>
@@ -99,29 +163,33 @@ const AdminDashboard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <img height={40} width={40} src='https://picsum.photos/50' />
-                            </td>
-                            <td>
-                                Flower
-                            </td>
-                            <td>
-                                112
-                            </td>
-                            <td>
-                                Flower for your mom
-                            </td>
-                            <td>
-                                Flower
-                            </td>
-                            <td>
-                                <div className='btn-group' role='group'>
-                                    <button className='btn btn-success'>Edit</button>
-                                    <button className='btn btn-danger'>Delete</button>
-                                </div>
-                            </td>
-                        </tr>
+                        {
+                            products.map((oneProduct) => (
+                                <tr>
+                                    <td>
+                                        <img height={40} width={40} alt="img" src={`http://localhost:5000/products/${oneProduct.productImage}`} />
+                                    </td>
+                                    <td>
+                                        {oneProduct.productName}
+                                    </td>
+                                    <td>
+                                        NRP. {oneProduct.productPrice}
+                                    </td>
+                                    <td>
+                                        {oneProduct.productDescription}
+                                    </td>
+                                    <td>
+                                        {oneProduct.productCategory}
+                                    </td>
+                                    <td>
+                                        <div className='btn-group' role='group'>
+                                            <Link to={`/admin/update/${oneProduct._id}`} className='btn btn-success'>Edit</Link>
+                                            <button onClick={deleteProduct} className='btn btn-danger'>Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        }
                     </tbody>
 
                 </table>
@@ -132,3 +200,14 @@ const AdminDashboard = () => {
 }
 
 export default AdminDashboard
+
+
+// new page (Update product)
+// Form (required fields) name, price, desc, category, old image, new image
+// use state 7 -
+// Fill the previous values
+// Call the api  (single product)
+// Backend
+// Based on _id (Admin Dashboard)
+// Transport '_id'  to upadte product
+// recieve in updateproduct page
