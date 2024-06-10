@@ -41,6 +41,25 @@ const AdminDashboard = () => {
         setProductImage(file)
         setPreviewImage(URL.createObjectURL(file))
     }
+    //delete product
+    const handleDelete = (id) => {
+        const confirmDialogue = window.confirm("Are you sire u want to delete?")
+        if (confirmDialogue) {
+            //delete product
+            deleteProduct(id).then((res) => {
+                if (res.status === 201) {
+                    toast.success(res.data.message)
+                    window.location.reload()
+                }
+            }).catch((error) => {
+                if (error.response.status === 500) {
+                    toast.error(error.response.data.message)
+                }
+            })
+        }
+
+    }
+
     //handle submit
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -59,6 +78,7 @@ const AdminDashboard = () => {
         createProductApi(formData).then((res) => {
             if (res.status === 201) {
                 toast.success(res.data.message)
+                window.location.reload()
             } else {
                 toast.error("Something went wrong in frontend!")
             }
@@ -184,7 +204,7 @@ const AdminDashboard = () => {
                                     <td>
                                         <div className='btn-group' role='group'>
                                             <Link to={`/admin/update/${oneProduct._id}`} className='btn btn-success'>Edit</Link>
-                                            <button onClick={deleteProduct} className='btn btn-danger'>Delete</button>
+                                            <button onClick={() => handleDelete(oneProduct._id)} className='btn btn-danger'>Delete</button>
                                         </div>
                                     </td>
                                 </tr>

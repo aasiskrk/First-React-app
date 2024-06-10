@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { getSingleProduct } from '../../apis/Api';
-
+import { updateProduct } from "../../apis/Api";
 
 const AdminUpdate = () => {
     // get id from url
