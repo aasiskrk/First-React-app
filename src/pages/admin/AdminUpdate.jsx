@@ -79,7 +79,7 @@ const AdminUpdate = () => {
                         <label className='mt-2'>Choose product Image</label>
                         <input onChange={handleImage} type="file" className='form-control' />
 
-                        <button className='btn btn-danger w-100 mt-2'>Update Product</button>
+                        <button  className='btn btn-danger w-100 mt-2'>Update Product</button>
 
                     </form>
                     <div className='image section'>
