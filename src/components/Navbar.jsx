@@ -8,6 +8,12 @@ const Navbar = () => {
   //get user from local Storage
   const user = JSON.parse(localStorage.getItem('user'))
 
+  //logout function
+  const handleLogout = () => {
+    localStorage.clear()
+    window.location.href = '/login'
+  }
+
   return (
     <>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -47,9 +53,9 @@ const Navbar = () => {
                       Welcome, {user.firstName}
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a></li>
+                      <li><Link class="dropdown-item" to={'/profile'}><i class="fas fa-user"></i> Profile</Link></li>
                       <li><a class="dropdown-item" href="#">Settings</a></li>
-                      <li><a class="dropdown-item" href="#">Logout</a></li>
+                      <li><button class="dropdown-item" onClick={handleLogout} >Logout</button></li>
                     </ul>
                   </div>
                 </>)
