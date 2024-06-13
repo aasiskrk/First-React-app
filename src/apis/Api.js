@@ -37,7 +37,7 @@ export const getSingleProduct = (id) =>
   Api.get(`/api/product/get_single_product/${id}`, config);
 
 export const deleteProduct = (id) =>
-  Api.delete(`/api/product/delete_product/${id}`);
+  Api.delete(`/api/product/delete_product/${id}`,config);
 
-export const updateProduct = (id) =>
-  Api.put(`/api/product/update_product/${id}`);
+export const updateProduct = (id, data) =>
+  Api.put(`/api/product/update_product/${id}`, data, config);

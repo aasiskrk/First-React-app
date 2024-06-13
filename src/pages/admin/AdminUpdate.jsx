@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { getSingleProduct } from '../../apis/Api';
 import { updateProduct } from "../../apis/Api";
+import { toast } from 'react-toastify';
 
 const AdminUpdate = () => {
     // get id from url
@@ -44,6 +45,34 @@ const AdminUpdate = () => {
         setPreviewNewImage(URL.createObjectURL(file))
     }
 
+    //update product function
+    const handleUpdate = (e) => {
+        e.preventDefault();
+        //make a form data
+        const formData = new FormData();
+        formData.append('productName', productName)
+        formData.append('productDescription', productDescription)
+        formData.append('productPrice', productPrice)
+        formData.append('productCategory', productCategory)
+        if (productNewImage) {
+            formData.append('productImage', productNewImage)
+
+        }
+        // api call 
+        updateProduct(id, formData).then((res) => {
+            if (res.status === 201) {
+                toast.success(res.data.message)
+            }
+        }).catch((error) => {
+            if (error.response.status === 500) {
+                toast.error(error.response.data.message)
+            } else if (error.response.status === 400) {
+                toast.warning(error.response.data.message)
+            }
+        })
+
+    }
+
 
 
 
@@ -79,7 +108,7 @@ const AdminUpdate = () => {
                         <label className='mt-2'>Choose product Image</label>
                         <input onChange={handleImage} type="file" className='form-control' />
 
-                        <button  className='btn btn-danger w-100 mt-2'>Update Product</button>
+                        <button onClick={handleUpdate} className='btn btn-danger w-100 mt-2'>Update Product</button>
 
                     </form>
                     <div className='image section'>
