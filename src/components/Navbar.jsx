@@ -6,12 +6,13 @@ import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   //get user from local Storage
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem('user'));
 
   //logout function
   const handleLogout = () => {
     localStorage.clear()
     window.location.href = '/login'
+
   }
 
   return (
